@@ -119,8 +119,11 @@ Cấu hình appsettings.json (ConnectionString)
 Chạy Migration:
 
 cd PCMSystem:
+
 dotnet restore:
+
 dotnet ef database update:
+
 dotnet run:
 
 
