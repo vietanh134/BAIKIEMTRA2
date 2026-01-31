@@ -118,10 +118,10 @@ Clone project
 Cấu hình appsettings.json (ConnectionString)
 Chạy Migration:
 
-cd PCMSystem
-dotnet restore
-dotnet ef database update
-dotnet run
+cd PCMSystem:
+dotnet restore:
+dotnet ef database update:
+dotnet run:
 
 
 Run project và đăng nhập bằng:
