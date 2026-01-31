@@ -1,0 +1,94 @@
+@page
+@model PCMSystem.Pages.Members.IndexModel
+
+@{
+    ViewData["Title"] = "Quản lý Hội viên";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">📋 Danh sách Hội viên</h1>
+    
+    <div class="mb-3">
+        <a asp-page="./Create" class="btn btn-success">➕ Thêm Hội viên mới</a>
+    </div>
+    
+    <div class="row">
+        @foreach (var member in Model.Members)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm member-card animate__animated" tabindex="0">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @member.FullName
+                            @if (member.RankLevel > 5.0)
+                            {
+                                <span class="badge bg-warning text-dark ms-2">PRO</span>
+                            }
+                            else if (member.RankLevel < 2.0)
+                            {
+                                <span class="badge bg-info ms-2">Newbie</span>
+                            }
+                        </h5>
+                        
+                        <p class="card-text text-muted">
+                            <small>
+                                <strong>Ngày tham gia:</strong> @member.JoinDate.ToString("dd/MM/yyyy")<br/>
+                                <strong>Tuổi:</strong> @member.AgeCalculated<br/>
+                                <strong>Điện thoại:</strong> @(member.PhoneNumber ?? "Chưa cập nhật")<br/>
+                                <strong>Trình độ (DUPR):</strong> 
+                                <span class="badge" style="background-color: @(member.RankLevel > 5 ? "#FFD700" : member.RankLevel < 2 ? "#00CED1" : "#87CEEB")">
+                                    @member.RankLevel.ToString("F1")
+                                </span>
+                            </small>
+                        </p>
+                        
+                        <a asp-page="./Details" asp-route-id="@member.Id" class="btn btn-sm btn-primary">
+                            Chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.Members.Count == 0)
+    {
+        <div class="alert alert-info">Chưa có hội viên nào trong hệ thống.</div>
+    }
+</div>
+
+<style>
+    .badge {
+        font-weight: bold;
+    }
+    .member-card {
+        cursor: pointer;
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .member-card:hover, .member-card:focus {
+        box-shadow: 0 0 30px #43c6ac55;
+        transform: scale(1.03);
+        animation: pulse 0.7s;
+        background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+    }
+    @@keyframes pulse {
+        0% { box-shadow: 0 0 0 0 #43c6ac55; }
+        70% { box-shadow: 0 0 30px 10px #43c6ac55; }
+        100% { box-shadow: 0 0 0 0 #43c6ac55; }
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.member-card').forEach(function(card) {
+            card.addEventListener('mousedown', function() {
+                card.classList.add('animate__pulse');
+            });
+            card.addEventListener('mouseup', function() {
+                card.classList.remove('animate__pulse');
+            });
+            card.addEventListener('mouseleave', function() {
+                card.classList.remove('animate__pulse');
+            });
+        });
+    });
+</script>

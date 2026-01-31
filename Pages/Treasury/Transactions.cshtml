@@ -1,0 +1,102 @@
+@page
+@model PCMSystem.Pages.Treasury.TransactionsModel
+
+@{
+    ViewData["Title"] = "Quản lý giao dịch";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">💰 Quản lý Giao dịch Tài chính</h1>
+
+    <!-- Alert cảnh báo quỹ âm -->
+    @if (Model.CurrentBalance < 0)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>⚠️ CẢNH BÁO: QUỸ ĐANG ÂM!</strong> Cần bổ sung nguồn tiền ngay. Số dư: 
+            <span class="text-danger font-weight-bold">@Model.CurrentBalance.ToString("C0")</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Tổng quỹ hiện tại -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center shadow animate__animated card-hover-gradient treasury-card" tabindex="0">
+                <div class="card-body">
+                    <h6 class="text-muted">Tổng Quỹ Hiện Tại</h6>
+                    <h2 class="@(Model.CurrentBalance >= 0 ? "text-success" : "text-danger")">
+                        @Model.CurrentBalance.ToString("C0")
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nút thêm giao dịch -->
+    <div class="mb-3">
+        <a asp-page="./CreateTransaction" class="btn btn-success">+ Thêm giao dịch</a>
+        <a asp-page="./Categories" class="btn btn-info">⚙️ Quản lý Danh mục</a>
+        <a href="/api/treasury/export-transactions" class="btn btn-warning">📊 Xuất Excel</a>
+    </div>
+
+    <!-- Danh sách giao dịch -->
+    <div class="card shadow animate__animated card-hover-gradient treasury-card" tabindex="0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Lịch sử giao dịch</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Transactions.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Danh mục</th>
+                                <th>Loại</th>
+                                <th class="text-end">Số tiền</th>
+                                <th>Mô tả</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var transaction in Model.Transactions)
+                            {
+                                <tr>
+                                    <td>@transaction.TransactionDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td><span class="badge bg-info">@transaction.Category.CategoryName</span></td>
+                                    <td>
+                                        @if (transaction.Category.Type == "Thu")
+                                        {
+                                            <span class="badge bg-success">Thu</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Chi</span>
+                                        }
+                                    </td>
+                                    <td class="text-end @(transaction.Category.Type == "Thu" ? "text-success" : "text-danger") font-weight-bold">
+                                        @(transaction.Category.Type == "Thu" ? "+" : "-")@transaction.Amount.ToString("C0")
+                                    </td>
+                                    <td>@transaction.Description</td>
+                                    <td>
+                                        <form method="post" asp-page-handler="delete" style="display: inline;">
+                                            <input type="hidden" name="id" value="@transaction.Id"/>
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Xóa giao dịch này?');">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">Chưa có giao dịch nào.</div>
+            }
+        </div>
+    </div>
+</div>

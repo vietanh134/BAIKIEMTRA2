@@ -1,0 +1,25 @@
+@page "AddParticipants/{challengeId:int}"
+@model PCMSystem.Pages.Challenges.AddParticipantsModel
+@{
+    ViewData["Title"] = "Chọn hội viên tham gia kèo";
+}
+<div class="container mt-5">
+    <h2>Chọn hội viên tham gia kèo: <span class="text-primary">@Model.ChallengeTitle</span></h2>
+    <form method="post">
+        <input type="hidden" name="ChallengeId" value="@Model.ChallengeId" />
+        <div class="mb-3">
+            <label class="form-label">Danh sách hội viên chưa tham gia:</label>
+            <div class="list-group" style="max-height:400px;overflow-y:auto;">
+                @foreach (var member in Model.AvailableMembers)
+                {
+                    <label class="list-group-item">
+                        <input type="checkbox" name="SelectedMemberIds" value="@member.Id" class="form-check-input me-2" />
+                        <strong>@member.FullName</strong> <span class="text-muted">(@member.PhoneNumber)</span>
+                    </label>
+                }
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Thêm vào kèo</button>
+        <a asp-page="./Details" asp-route-id="@Model.ChallengeId" class="btn btn-secondary ms-2">Quay lại</a>
+    </form>
+</div>

@@ -1,0 +1,96 @@
+@page
+@model PCMSystem.Pages.Matches.IndexModel
+
+@{
+    ViewData["Title"] = "Lịch sử Trận đấu";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">🏆 Lịch sử Trận đấu</h1>
+
+    <div class="mb-3">
+        <a asp-page="./Create" class="btn btn-primary btn-lg">
+            📝 Ghi nhận trận đấu mới (Admin)
+        </a>
+    </div>
+
+    <div class="card shadow animate__animated card-hover-gradient match-card" tabindex="0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Danh sách Trận đấu</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Matches.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ngày giờ</th>
+                                <th>Thể thức</th>
+                                <th>Người thắng</th>
+                                <th>Người thua</th>
+                                <th>Tính điểm</th>
+                                <th>Kèo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var match in Model.Matches)
+                            {
+                                <tr>
+                                    <td>@match.MatchDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        <span class="badge @(match.Format == 0 ? "bg-info" : "bg-warning text-dark")">
+                                            @(match.Format == 0 ? "Đơn" : "Đôi")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-success font-weight-bold">
+                                            @match.Winner1.FullName
+                                            @if (match.Format == 1 && match.Winner2 != null)
+                                            {
+                                                <span> & @match.Winner2.FullName</span>
+                                            }
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-danger">
+                                            @match.Loser1.FullName
+                                            @if (match.Format == 1 && match.Loser2 != null)
+                                            {
+                                                <span> & @match.Loser2.FullName</span>
+                                            }
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (match.IsRanked)
+                                        {
+                                            <span class="badge bg-success">✓ Có</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">✗ Không</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (match.Challenge != null)
+                                        {
+                                            <span class="badge bg-warning text-dark">@match.Challenge.Title</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Giao hữu</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">Chưa có trận đấu nào được ghi nhận.</div>
+            }
+        </div>
+    </div>
+</div>

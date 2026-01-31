@@ -1,0 +1,162 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard - PCM System";
+}
+
+<div class="container-fluid mt-5 mb-5 animate__animated animate__fadeIn">
+    <!-- Tiêu đề -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">🏓 Hệ thống Quản lý CLB Pickleball</h1>
+        <p class="lead text-muted">"Vợt Thủ Phố Núi" - Vui - Khỏe - Có Thưởng</p>
+    </div>
+
+    <!-- Các chỉ số quan trọng -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-success animate__animated animate__pulse animate__delay-1s card-hover-gradient">
+                <div class="card-body">
+                    <h6 class="text-success">💰 Quỹ Hiện tại</h6>
+                    <h2 class="@(Model.CurrentBalance >= 0 ? "text-success" : "text-danger")">
+                        @Model.CurrentBalance.ToString("C0")
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-primary animate__animated animate__pulse animate__delay-1s card-hover-gradient">
+                <div class="card-body">
+                    <h6 class="text-primary">👥 Hội viên</h6>
+                    <h2 class="text-primary">@Model.TotalMembers</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-warning animate__animated animate__pulse animate__delay-1s card-hover-gradient">
+                <div class="card-body">
+                    <h6 class="text-warning">🎯 Kèo đang mở</h6>
+                    <h2 class="text-warning">@Model.OpenChallenges</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-info animate__animated animate__pulse animate__delay-1s card-hover-gradient">
+                <div class="card-body">
+                    <h6 class="text-info">🏆 Trận đấu</h6>
+                    <h2 class="text-info">@Model.TotalMatches</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Top 5 Ranking -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">🏅 Top 5 Cao thủ (Rank cao nhất)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.TopRanking.Any())
+                    {
+                        <ol class="list-group list-group-numbered">
+                            @foreach (var member in Model.TopRanking)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@member.FullName</strong>
+                                        @if (member.RankLevel > 5.0)
+                                        {
+                                            <span class="badge bg-warning text-dark ms-2">PRO</span>
+                                        }
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">@member.RankLevel.ToString("F1")</span>
+                                </li>
+                            }
+                        </ol>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Chưa có dữ liệu</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Tin tức mới nhất -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">📰 Tin tức mới nhất</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.LatestNews.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var news in Model.LatestNews)
+                            {
+                                <div class="list-group-item">
+                                    <h6 class="mb-1">@news.Title</h6>
+                                    <p class="mb-1 text-muted small">
+                                        @if (news.Content.Length > 100)
+                                        {
+                                            @(news.Content.Substring(0, 100) + "...")
+                                        }
+                                        else
+                                        {
+                                            @news.Content
+                                        }
+                                    </p>
+                                    <small class="text-muted">📅 @news.PostedDate.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Chưa có tin tức nào</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row mt-5 text-center animate__animated animate__fadeInUp animate__delay-1s">
+        <div class="col-md-3 mb-3">
+            <a asp-page="/Challenges/Index" class="btn btn-outline-primary btn-lg w-100 animate__animated animate__pulse animate__infinite btn-hover-glow">
+                🎾 Xem Kèo Đấu
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a asp-page="/Members/Index" class="btn btn-outline-success btn-lg w-100 animate__animated animate__pulse animate__infinite btn-hover-glow">
+                👥 Danh sách Hội viên
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a asp-page="/Treasury/Transactions" class="btn btn-outline-info btn-lg w-100 animate__animated animate__pulse animate__infinite btn-hover-glow">
+                💰 Quản lý Tài chính
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a asp-page="/Matches/Index" class="btn btn-outline-warning btn-lg w-100 animate__animated animate__pulse animate__infinite btn-hover-glow">
+                🏆 Lịch sử Trận đấu
+            </a>
+        </div>
+    </div>
+<style>
+    .card-hover-gradient:hover {
+        background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+        box-shadow: 0 0 30px #43c6ac55;
+        transition: 0.3s;
+    }
+    .btn-hover-glow:hover {
+        box-shadow: 0 0 20px #43c6ac99, 0 0 10px #f8ffae99;
+        transform: scale(1.05);
+        transition: 0.2s;
+    }
+</style>
+</div>

@@ -1,0 +1,56 @@
+@page
+@model PCMSystem.Pages.Members.CreateModel
+
+@{
+    ViewData["Title"] = "Thêm Hội viên mới";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4">➕ Thêm Hội viên mới</h1>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @Model.ErrorMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow animate__animated card-hover-gradient member-card" tabindex="0">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="FullName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="FullName" name="FullName" value="@Model.FullName" placeholder="VD: Đào quang Viet anh" required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="PhoneNumber" class="form-label">Điện thoại <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="VD: 0976431234" required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="DOB" class="form-label">Ngày sinh (Tuỳ chọn)</label>
+                            <input type="date" class="form-control" id="DOB" name="DOB" value="@Model.DOB?.ToString("yyyy-MM-dd")"/>
+                            <small class="text-muted">⚠️ Tuổi phải từ 10-80</small>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <strong>ℹ️ Thông tin mặc định sẽ được tạo:</strong><br/>
+                            • Ngày tham gia: Hôm nay<br/>
+                            • Trình độ DUPR: 1.0<br/>
+                            • Trạng thái: Hoạt động
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1">✅ Thêm Hội viên</button>
+                            <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

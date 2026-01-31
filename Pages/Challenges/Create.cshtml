@@ -1,0 +1,84 @@
+@page
+@model PCMSystem.Pages.Challenges.CreateModel
+
+@{
+    ViewData["Title"] = "Tạo Kèo mới";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="mb-4">🎾 Tạo Kèo mới</h1>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @Model.ErrorMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow animate__animated card-hover-gradient challenge-card" tabindex="0">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="Title" class="form-label">Tiêu đề Kèo <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" placeholder="VD: Kèo 1vs1 Nguyễn Minh - Trần Hùng" required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Mode" class="form-label">Thể thức <span class="text-danger">*</span></label>
+                            <select class="form-select" id="Mode" name="Mode" required onchange="updateModeDisplay()">
+                                <option value="">-- Chọn thể thức --</option>
+                                <option value="0" selected="@(Model.Mode == 0)">Đơn (1vs1)</option>
+                                <option value="1" selected="@(Model.Mode == 1)">Đôi (2vs2)</option>
+                                <option value="2" selected="@(Model.Mode == 2)">Mini-game (King of the Court)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="RewardDescription" class="form-label">Mô tả Phần thưởng <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="RewardDescription" name="RewardDescription" rows="2" placeholder="VD: 20 quả trứng gà, Nồi lẩu, Thùng bia..." required>@Model.RewardDescription</textarea>
+                        </div>
+
+                        <div class="mb-3" id="feeSection" style="display: none;">
+                            <label for="EntryFee" class="form-label">Lệ phí tham gia (VND) - Chỉ cho Mini-game <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="EntryFee" name="EntryFee" value="@Model.EntryFee" placeholder="VD: 20000" step="1000"/>
+                            <small class="text-muted">Quỹ thưởng = Lệ phí × Số người tham gia</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Mô tả chi tiết (Tuỳ chọn)</label>
+                            <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Ghi chú thêm về kèo...">@Model.Description</textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1">✅ Tạo Kèo</button>
+                            <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateModeDisplay() {
+        const mode = document.getElementById('Mode').value;
+        const feeSection = document.getElementById('feeSection');
+        const feeInput = document.getElementById('EntryFee');
+        
+        if (mode === '2') {
+            feeSection.style.display = 'block';
+            feeInput.required = true;
+        } else {
+            feeSection.style.display = 'none';
+            feeInput.required = false;
+            feeInput.value = '0';
+        }
+    }
+    
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', updateModeDisplay);
+</script>

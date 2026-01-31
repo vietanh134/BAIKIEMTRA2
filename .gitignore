@@ -1,0 +1,69 @@
+# Binaries and executables
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.so
+*.dylib
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Test Results
+TestResults/
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific
+appsettings.Development.json
+
+# Application Insights
+ApplicationInsights.config
+bin/
+obj/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+
+# Local Database
+PCMSystem.mdf
+PCMSystem.ldf

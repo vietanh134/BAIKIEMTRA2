@@ -1,0 +1,154 @@
+@page
+@model PCMSystem.Pages.Matches.CreateModel
+
+@{
+    ViewData["Title"] = "Ghi nhận Trận đấu";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">📝 Ghi nhận Trận đấu mới</h1>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @Model.ErrorMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow animate__animated card-hover-gradient match-card" tabindex="0">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ChallengeId" class="form-label">Chọn Kèo (Tùy chọn)</label>
+                                <select name="ChallengeId" id="ChallengeId" class="form-select">
+                                    <option value="">-- Trận giao hữu --</option>
+                                    @foreach (var challenge in Model.Challenges)
+                                    {
+                                        <option value="@challenge.Id">@challenge.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="Format" class="form-label">Thể thức</label>
+                                <select name="Format" id="Format" class="form-select" required onchange="updatePlayers()">
+                                    <option value="">-- Chọn thể thức --</option>
+                                    <option value="0">Đơn (1vs1)</option>
+                                    <option value="1">Đôi (2vs2)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <h5 class="mb-3">Người Thắng</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="Winner1Id" class="form-label">Người Thắng 1</label>
+                                <select name="Winner1Id" id="Winner1Id" class="form-select" required>
+                                    <option value="">-- Chọn người chơi --</option>
+                                    @foreach (var member in Model.Members)
+                                    {
+                                        <option value="@member.Id">@member.FullName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="winner2Section" style="display: none;">
+                                <label for="Winner2Id" class="form-label">Người Thắng 2</label>
+                                <select name="Winner2Id" id="Winner2Id" class="form-select">
+                                    <option value="">-- Chọn người chơi --</option>
+                                    @foreach (var member in Model.Members)
+                                    {
+                                        <option value="@member.Id">@member.FullName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <h5 class="mb-3">Người Thua</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="Loser1Id" class="form-label">Người Thua 1</label>
+                                <select name="Loser1Id" id="Loser1Id" class="form-select" required>
+                                    <option value="">-- Chọn người chơi --</option>
+                                    @foreach (var member in Model.Members)
+                                    {
+                                        <option value="@member.Id">@member.FullName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="loser2Section" style="display: none;">
+                                <label for="Loser2Id" class="form-label">Người Thua 2</label>
+                                <select name="Loser2Id" id="Loser2Id" class="form-select">
+                                    <option value="">-- Chọn người chơi --</option>
+                                    @foreach (var member in Model.Members)
+                                    {
+                                        <option value="@member.Id">@member.FullName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="IsRanked" id="IsRanked" class="form-check-input" value="true"/>
+                                <label class="form-check-label" for="IsRanked">
+                                    ✓ Tính vào Rank DUPR
+                                    <small class="text-muted">(Người thắng +0.1, Người thua -0.1)</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Notes" class="form-label">Ghi chú (Tùy chọn)</label>
+                            <textarea name="Notes" id="Notes" class="form-control" rows="2"></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1">✅ Lưu kết quả</button>
+                            <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updatePlayers() {
+        const format = document.getElementById('Match_Format').value;
+        const winner2Section = document.getElementById('winner2Section');
+        const loser2Section = document.getElementById('loser2Section');
+        const winner2Select = document.querySelector('[name="Match.Winner2Id"]');
+        const loser2Select = document.querySelector('[name="Match.Loser2Id"]');
+
+        if (format === '1') { // Doubles
+            winner2Section.style.display = 'block';
+            loser2Section.style.display = 'block';
+            winner2Select.required = true;
+            loser2Select.required = true;
+        } else {
+            winner2Section.style.display = 'none';
+            loser2Section.style.display = 'none';
+            winner2Select.required = false;
+            loser2Select.required = false;
+        }
+    }
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

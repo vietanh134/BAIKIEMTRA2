@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hệ thống CLB Pickleball "Vợt Thủ Phố Núi"</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <style>
+            .card-hover-gradient {
+                transition: box-shadow 0.3s, transform 0.3s;
+                cursor: pointer;
+            }
+            .card-hover-gradient:hover, .card-hover-gradient:focus {
+                box-shadow: 0 0 20px 2px #00c3ff, 0 0 40px 4px #ffff1c;
+                transform: scale(1.03);
+                z-index: 2;
+            }
+        </style>
+    <link rel="stylesheet" href="~/PCMSystem.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">🎾 PCM - Pickleball Club Manager</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Index">🏠 Trang chủ</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                👥 Hội viên
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-page="/Members/Index">Danh sách Hội viên</a></li>
+                                <li><a class="dropdown-item" asp-page="/Members/Create">➕ Thêm Hội viên</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                💰 Tài chính
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-page="/Treasury/Transactions">Lịch sử Giao dịch</a></li>
+                                <li><a class="dropdown-item" asp-page="/Treasury/CreateTransaction">➕ Thêm Giao dịch</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-page="/Treasury/Categories">⚙️ Danh mục</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                🎾 Thi đấu
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-page="/Challenges/Index">Danh sách Kèo</a></li>
+                                <li><a class="dropdown-item" asp-page="/Challenges/Create">➕ Tạo Kèo</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-page="/Matches/Index">Lịch sử Trận Đấu</a></li>
+                                <li><a class="dropdown-item" asp-page="/Matches/Create">➕ Ghi nhận Trận</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                📰 Tin tức
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-page="/News/Index">Danh sách Tin tức</a></li>
+                                <li><a class="dropdown-item" asp-page="/News/Create">➕ Đăng bài viết</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - PCMSystem - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+        <script>
+            $(function() {
+                // Applies to all card types
+                $(document).on('mousedown keydown', '.card-hover-gradient', function(e) {
+                    if (e.type === 'mousedown' || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '))) {
+                        var $card = $(this);
+                        $card.addClass('animate__pulse');
+                        setTimeout(function() {
+                            $card.removeClass('animate__pulse');
+                        }, 700);
+                    }
+                });
+            });
+        </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

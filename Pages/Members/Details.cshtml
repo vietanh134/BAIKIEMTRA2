@@ -1,0 +1,102 @@
+@page
+@model PCMSystem.Pages.Members.DetailsModel
+
+@{
+    ViewData["Title"] = "Chi tiết Hội viên";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">
+        @Model.Member.FullName
+        @if (Model.Member.RankLevel > 5.0)
+        {
+            <span class="badge bg-warning text-dark">PRO</span>
+        }
+        else if (Model.Member.RankLevel < 2.0)
+        {
+            <span class="badge bg-info">Newbie</span>
+        }
+    </h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow animate__animated card-hover-gradient member-card" tabindex="0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Thông tin hội viên</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="width: 30%;">Họ và tên:</th>
+                            <td>@Model.Member.FullName</td>
+                        </tr>
+                        <tr>
+                            <th>Ngày sinh:</th>
+                            <td>
+                                @if (Model.Member.DOB.HasValue)
+                                {
+                                    @Model.Member.DOB.Value.ToString("dd/MM/yyyy")
+                                    <small class="text-muted">(@Model.Member.AgeCalculated tuổi)</small>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Chưa cập nhật</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Điện thoại:</th>
+                            <td>@(Model.Member.PhoneNumber ?? "Chưa cập nhật")</td>
+                        </tr>
+                        <tr>
+                            <th>Ngày tham gia:</th>
+                            <td>@Model.Member.JoinDate.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Trình độ (DUPR):</th>
+                            <td>
+                                <span class="badge" style="background-color: @(Model.Member.RankLevel > 5 ? "#FFD700" : Model.Member.RankLevel < 2 ? "#00CED1" : "#87CEEB"); font-size: 1.1em;">
+                                    @Model.Member.RankLevel.ToString("F1")
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Trạng thái:</th>
+                            <td>
+                                <span class="badge @(Model.Member.Status == "Active" ? "bg-success" : "bg-danger")">
+                                    @(Model.Member.Status == "Active" ? "Hoạt động" : "Tạm dừng")
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow animate__animated card-hover-gradient member-card" tabindex="0">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Thống kê</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <h6>Trình độ</h6>
+                        <h3 class="text-primary">@Model.Member.RankLevel.ToString("F1")</h3>
+                    </div>
+                    <hr/>
+                    @if (Model.Member.AgeCalculated > 0)
+                    {
+                        <div class="mb-3">
+                            <h6>Tuổi</h6>
+                            <h3 class="text-success">@Model.Member.AgeCalculated</h3>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-page="./Index" class="btn btn-secondary">← Quay lại</a>
+    </div>
+</div>

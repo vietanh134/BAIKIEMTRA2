@@ -1,0 +1,98 @@
+@page
+@model PCMSystem.Pages.Challenges.DetailsModel
+
+@{
+    ViewData["Title"] = Model.Challenge.Title;
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">
+        @Model.Challenge.Title
+        <span class="badge @(Model.Challenge.Status == "Open" ? "bg-success" : Model.Challenge.Status == "Closed" ? "bg-warning text-dark" : "bg-secondary")">
+            @(Model.Challenge.Status == "Open" ? "Đang mở" : Model.Challenge.Status == "Closed" ? "Chốt rồi" : "Hoàn thành")
+        </span>
+    </h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4 animate__animated card-hover-gradient challenge-card" tabindex="0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">ℹ️ Thông tin Kèo</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="width: 30%;">Người tạo:</th>
+                            <td>@Model.Challenge.Creator.FullName</td>
+                        </tr>
+                        <tr>
+                            <th>Thể thức:</th>
+                            <td><span class="badge bg-info">@Model.Challenge.ModeDisplay</span></td>
+                        </tr>
+                        <tr>
+                            <th>Phần thưởng:</th>
+                            <td><strong>@Model.Challenge.RewardDescription</strong></td>
+                        </tr>
+                        @if (Model.Challenge.Mode == 2)
+                        {
+                            <tr>
+                                <th>Lệ phí/người:</th>
+                                <td>@Model.Challenge.EntryFee.ToString("C0")</td>
+                            </tr>
+                            <tr class="table-success">
+                                <th>🏆 Tổng Quỹ:</th>
+                                <td><strong class="text-success">@Model.Challenge.TotalPot.ToString("C0")</strong></td>
+                            </tr>
+                        }
+                        <tr>
+                            <th>Ngày tạo:</th>
+                            <td>@Model.Challenge.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <th>Mô tả:</th>
+                            <td>@(string.IsNullOrEmpty(Model.Challenge.Description) ? "Không có" : Model.Challenge.Description)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow animate__animated card-hover-gradient challenge-card" tabindex="0">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">👥 Người tham gia (@Model.Participants.Count)</h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    @if (Model.Participants.Count > 0)
+                    {
+                        <ul class="list-group">
+                            @foreach (var participant in Model.Participants)
+                            {
+                                <li class="list-group-item">
+                                    <strong>@participant.FullName</strong>
+                                    <br/>
+                                    <small class="text-muted">DUPR: @participant.RankLevel.ToString("F1")</small>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Chưa có ai tham gia</p>
+                    }
+                </div>
+            </div>
+
+            @if (Model.Challenge.Status == "Open")
+            {
+                <a asp-page="./AddParticipants" asp-route-challengeId="@Model.Challenge.Id" class="btn btn-success w-100 mt-3">
+                    ✋ Tham gia Kèo (Chọn hội viên)
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-page="./Index" class="btn btn-secondary">← Quay lại</a>
+    </div>
+</div>
